@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
@@ -10,13 +10,16 @@ import Cart from "../components/Card";
 import brockenImg from "../assets/brocken-profile.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-FontAwesomeIcon;
-faLink;
 import addToListImg from "../assets/bookmark.png";
+import addedToList from "../assets/star.png";
 import { useTranslation } from "react-i18next";
-import Show from "./Show";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../FireBase/FireBase";
+import useFetchWachList from "../hooks/useFetchWachList";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-const Movie = function ({ langCode }) {
+const Movie = function ({ langCode, userName, userUID }) {
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
   const [movieLocal, setMovieLocal] = useState({});
@@ -26,7 +29,10 @@ const Movie = function ({ langCode }) {
   const [crew, setCrew] = useState([]);
   const [similars, setSilmilars] = useState([]);
   const [err, setErr] = useState(null);
+  const [inList, setInList] = useState(false);
   const { t } = useTranslation();
+  const [trigger, setTrigger] = useState(false);
+  const [openLoginMsg, setOpenLoginMsg] = useState(false);
 
   const openModal = () => {
     setIsOpen(true);
@@ -35,7 +41,23 @@ const Movie = function ({ langCode }) {
   const closeModal = () => {
     setIsOpen(false);
   };
+  const [watchList, idsInList, setWatchList, setIdsInList] = useFetchWachList({
+    userUID,
+    trigger,
+  });
 
+  const location = useLocation();
+  useEffect(() => {
+    AOS.init();
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (idsInList?.includes(String(movieId))) {
+      setInList(true);
+    } else {
+      setInList(false);
+    }
+  }, [idsInList, movieId]);
   const options = useMemo(() => {
     return {
       method: "GET",
@@ -51,6 +73,19 @@ const Movie = function ({ langCode }) {
   const textDirection = langCode === "ar" ? "text-right" : "text-left";
   const tagLine = movieLocal.tagline ? movieLocal.tagline : movie.tagline;
 
+  async function handleAddToWatchList() {
+    if (userUID) {
+      await setDoc(doc(db, userUID, movieId), movie);
+      setInList(true);
+      setTrigger((prev) => !prev);
+    } else {
+      setOpenLoginMsg(true);
+      setTimeout(() => {
+        setOpenLoginMsg(false);
+      }, 3000);
+    }
+  }
+
   useEffect(() => {
     if (langCode === "ar") {
       const URL = `https://api.themoviedb.org/3/movie/${movieId}?language=${langCode}`;
@@ -65,10 +100,8 @@ const Movie = function ({ langCode }) {
           } else {
             const data = await res.json();
             setMovieLocal(data);
-            console.log(data);
           }
         } catch (e) {
-          //setErr(true); // Set the actual error message received from the API
           const errorMsg =
             e.message ||
             "Sorry, we couldn't find the media you're looking for. It's possible that the ID is incorrect or there's an issue with our server. Please try again later";
@@ -92,10 +125,8 @@ const Movie = function ({ langCode }) {
         } else {
           const data = await res.json();
           setMovie(data);
-          console.log(data);
         }
       } catch (e) {
-        //setErr(true); // Set the actual error message received from the API
         const errorMsg =
           e.message ||
           "Sorry, we couldn't find the media you're looking for. It's possible that the ID is incorrect or there's an issue with our server. Please try again later";
@@ -222,13 +253,13 @@ const Movie = function ({ langCode }) {
         <Error error={err} />
       ) : (
         <>
-          <NavBar />
+          <NavBar userName={userName} trigger={trigger} userUID={userUID} />
           <div
             className={`px-2 md:px-6 lg:px-32 xl:px-44 2xl:px-64 mt-6 ${textDirection} `}
           >
             <div
-              className={`flex gap-12 ${
-                langCode === "ar" ? "flex-row-reverse" : ""
+              className={`flex flex-col gap-8 items-center md:flex-row ${
+                langCode === "ar" ? "justify-between " : "gap-12"
               } `}
             >
               <img
@@ -238,7 +269,7 @@ const Movie = function ({ langCode }) {
                 alt="movie poster"
                 className="w-64 min-w-64 rounded-lg  hover:opacity-95 "
               />
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-6 ">
                 <div
                   className={`flex justify-between ${
                     langCode === "ar" ? "flex-row-reverse" : ""
@@ -246,12 +277,16 @@ const Movie = function ({ langCode }) {
                 >
                   <div className="flex flex-col">
                     <h1
-                      className={`text-4xl font-semibold ${
-                        langCode === "ar" ? "flex-row-reverse" : ""
+                      className={`text-4xl flex gap-2 font-semibold ${
+                        langCode === "ar"
+                          ? "flex-row-reverse text-right"
+                          : "text-left"
                       } `}
                     >
-                      {movieLocal.title || movie.original_title}{" "}
-                      <span className="text-stone-500">
+                      {movieLocal.title ||
+                        movieLocal.original_title ||
+                        movie.original_title}{" "}
+                      <span className="text-stone-500 ">
                         ({movie?.release_date?.slice(0, 4)})
                       </span>
                     </h1>
@@ -271,11 +306,32 @@ const Movie = function ({ langCode }) {
                       </h3>
                     </div>
                   </div>
-                  <img
-                    src={addToListImg}
-                    alt="Add to watchList"
-                    className="size-16 p-2 rounded-lg hover:bg-stone-100 hover:cursor-pointer duration-200 ease-in"
-                  />
+
+                  {inList ? (
+                    <img
+                      src={addedToList}
+                      alt="Already in the list"
+                      className="size-16 p-2 rounded-lg hover:bg-stone-100 duration-200 ease-in"
+                    />
+                  ) : (
+                    <div className="relative">
+                      {" "}
+                      <img
+                        onClick={handleAddToWatchList}
+                        src={addToListImg}
+                        alt="Add to watchList"
+                        className="size-16 p-2 rounded-lg hover:bg-stone-100 hover:cursor-pointer duration-200 ease-in"
+                      />
+                      {openLoginMsg && (
+                        <div
+                          data-aos="zoom-in"
+                          className="absolute text-center w-40 -bottom-8 -right-12 bg-amber-400 text-sm p-1 font-semibold rounded-lg "
+                        >
+                          You have to login first!
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div
                   className={`flex gap-16 items-center ${
@@ -509,21 +565,23 @@ const Movie = function ({ langCode }) {
               <h3 className="text-2xl font-semibold mb-2">
                 {t("moreLikeThis")}
               </h3>
-              {similars.length > 0 ? (
-                <div
-                  className={`flex gap-3 overflow-auto scroll-smooth min-h-80 ${
-                    langCode === "ar" ? "flex-row-reverse" : "flex-row"
-                  }`}
-                >
-                  {similars.map((movie) => (
-                    <Cart key={movie.id} movie={movie} loaded type="movie" />
-                  ))}
-                </div>
-              ) : (
-                <div className=" gap-3 overflow-auto scroll-smooth min-h-80 text-center flex justify-center font-semibold  text-xl">
-                  <p className="pt-20">{t("similarErr")}</p>
-                </div>
-              )}
+              <div data-aos="zoom-in-up" data-aos-delay="300">
+                {similars.length > 0 ? (
+                  <div
+                    className={`flex gap-3 overflow-auto scroll-smooth min-h-80 ${
+                      langCode === "ar" ? "flex-row-reverse" : "flex-row"
+                    }`}
+                  >
+                    {similars.map((movie) => (
+                      <Cart key={movie.id} movie={movie} loaded type="movie" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className=" gap-3 overflow-auto scroll-smooth min-h-80 text-center flex justify-center font-semibold  text-xl">
+                    <p className="pt-20">{t("similarErr")}</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

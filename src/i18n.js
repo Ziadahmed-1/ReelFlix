@@ -12,7 +12,7 @@ i18n
     resources: {
       en: {
         translation: {
-          overview: "overiew",
+          overview: "Overiew",
           myWatchlist: "My Watchlist",
           login: "Login/Register",
           welcome: "Welcome,",
@@ -53,6 +53,7 @@ i18n
           upComing: "Up Coming",
           popular: "Popular",
           airingToday: "Airing Today",
+          watchList: "Watch list ",
         },
       },
       ar: {
@@ -88,7 +89,7 @@ i18n
           webSite: "الموقع الالكتروني",
           moreLikeThis: "المزيد مثل هذا",
           similarErr:
-            "نعمل حاليًا على تحسين هذه الميزة لهذا الفيلم. لتقديم أفضل تجربة، سنحتاج إلى بعض البيانات الإضافية. يرجى التحقق مرة أخرى قريبًا!",
+            "! نعمل حاليًا على تحسين هذه الميزة لهذا الفيلم. لتقديم أفضل تجربة، سنحتاج إلى بعض البيانات الإضافية. يرجى التحقق مرة أخرى قريبًا",
           productionCompanies: "شركات الانتاج",
           episodes: "الحلقات",
           seasons: "المواسم",
@@ -97,6 +98,7 @@ i18n
           upComing: "قادم قريباً",
           popular: "رائج",
           airingToday: "يعرض اليوم",
+          watchList: "قائمة مشاهدات ",
         },
       },
     },

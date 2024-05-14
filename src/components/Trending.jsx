@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useLocation } from "react-router-dom";
 
 import Card from "../components/Card";
 import { useTranslation } from "react-i18next";
@@ -34,7 +36,6 @@ const Trending = function ({ activeStyle, langCode }) {
     const fetchMovies = async function () {
       const res = await fetch(URL, options);
       const data = await res.json();
-      console.log(data.results);
       setMovies(data.results);
       setIsLoaded(true);
     };
@@ -49,12 +50,16 @@ const Trending = function ({ activeStyle, langCode }) {
       setIsLoaded(false);
       const res = await fetch(URL, options);
       const data = await res.json();
-      console.log(data.results);
       setShows(data.results);
       setIsLoaded(true);
     };
     fetchShows();
   }, [langCode, options, trending]);
+
+  const location = useLocation();
+  useEffect(() => {
+    AOS.init();
+  }, [location.pathname]);
 
   return (
     <div className="px-2 md:px-6 lg:px-32 xl:px-44 2xl:px-64 mt-6">
@@ -81,30 +86,29 @@ const Trending = function ({ activeStyle, langCode }) {
       </div>
       <div className="felx flex-col gap-2 ">
         <h3 className="text-3xl mt-6">{t("movies")}</h3>
-        <motion.div
-          initial
-          animate={{ y: 50 }}
-          transition={{ delay: 1 }}
-          whileInView={{ y: 0 }}
+        <div
+          data-aos="zoom-in-up"
+          data-aos-delay="500"
+          data-aos-duration="300"
           className="flex gap-3 overflow-auto scroll-smooth"
         >
           {movies.map((movie) => (
-            <Card key={movie.id} movie={movie} loaded={isLoaded} />
+            <Card key={movie.id} movie={movie} type="movie" loaded={isLoaded} />
           ))}
-        </motion.div>
+        </div>
       </div>
       <div className="felx flex-col gap-2 ">
         <h3 className="text-3xl mt-6">{t("tvShows")}</h3>
-        <motion.div
-          initial
-          animate={{ y: 50 }}
-          whileInView={{ y: 0 }}
+        <div
+          data-aos="zoom-in-up"
+          data-aos-delay="500"
+          data-aos-duration="300"
           className="flex gap-3 overflow-auto scroll-smooth"
         >
           {shows.map((show) => (
-            <Card key={show.id} movie={show} loaded={isLoaded} />
+            <Card key={show.id} movie={show} type="show" loaded={isLoaded} />
           ))}
-        </motion.div>
+        </div>
       </div>
       <hr className="my-6" />
     </div>

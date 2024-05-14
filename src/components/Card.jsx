@@ -3,18 +3,8 @@ import "react-circular-progressbar/dist/styles.css";
 import placeHolder from "../assets/brocken-img.png";
 import { NavLink } from "react-router-dom";
 
-const Cart = function ({ movie, loaded, type }) {
+const Card = function ({ movie, loaded, type }) {
   const posterUrlBase = `https://image.tmdb.org/t/p/original`;
-  // const options = useMemo(() => {
-  //   return {
-  //     method: "GET",
-  //     headers: {
-  //       accept: "application/json",
-  //       Authorization:
-  //         "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZWJiZTM1MDRhY2MwMzgyM2ZkNTA0YzIwMzI1NzFiMSIsInN1YiI6IjY2MjhlMGQ5MzQ0YThlMDE2NmFmMGUyZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.t0kntx9eQ3WaV9lZTYF90GOGI2-HJaY3GIDoBGIBAgo",
-  //     },
-  //   };
-  // }, []);
 
   function dateFormatter(date) {
     const months = [
@@ -41,22 +31,11 @@ const Cart = function ({ movie, loaded, type }) {
     ? movie?.first_air_date
     : movie?.release_date;
 
-  const media = type || movie.media_type;
+  const mediaChecked = movie.last_air_date ? "shows" : "movie";
+  const media = type || mediaChecked;
+
   const route =
     media === "movie" ? `/movies/${movie?.id}` : `/shows/${movie?.id}`;
-
-  // useEffect(() => {
-  //   const fetching = async function () {
-  //     const res = await fetch(
-  //       "https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1",
-  //       options
-  //     );
-  //     const data = await res.json();
-  //     console.log(data);
-  //     setItem(() => data.results[18]);
-  //   };
-  //   fetching();
-  // }, [options]);
 
   const progress = movie?.vote_average * 10;
   const ratingColor =
@@ -67,6 +46,7 @@ const Cart = function ({ movie, loaded, type }) {
       {loaded ? (
         <NavLink to={route}>
           <img
+            loading="lazy"
             src={
               movie?.poster_path
                 ? posterUrlBase + movie?.poster_path
@@ -78,14 +58,15 @@ const Cart = function ({ movie, loaded, type }) {
         </NavLink>
       ) : (
         <img
+          loading="lazy"
           src={placeHolder}
           alt="The movie / show poster"
           className="min-w-44 min-h-64 rounded-lg cursor-pointer hover:opacity-95"
         />
       )}
-      <div className="ml-2 pt-2">
+      <div className="ml-2 pt-2 min-w-44 w-44 ">
         <NavLink to={route}>
-          <span className="font-bold text-lg text-pretty hover:cursor-pointer hover:text-primary transition-all duration-200">
+          <span className="font-bold text-lg text-pretty hover:cursor-pointer hover:text-lime-500 transition-all duration-200">
             {movie?.original_name || movie?.title}
           </span>
         </NavLink>
@@ -108,4 +89,4 @@ const Cart = function ({ movie, loaded, type }) {
   );
 };
 
-export default Cart;
+export default Card;

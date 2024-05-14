@@ -1,7 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
 import Card from "../components/Card";
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useLocation } from "react-router-dom";
+
 const NowPlaying = function ({ activeStyle, langCode }) {
   const [nowPlaying, setNowPlaying] = useState("movie");
   const [data, setData] = useState([]);
@@ -33,11 +36,15 @@ const NowPlaying = function ({ activeStyle, langCode }) {
       const res = await fetch(URL, options);
       const data = await res.json();
       setData(data.results);
-      console.log(data.results);
       setIsLoaded(true);
     };
     fetchNowPlaying();
   }, [langCode, nowPlaying, options]);
+
+  const location = useLocation();
+  useEffect(() => {
+    AOS.init();
+  }, [location.pathname]);
 
   return (
     <div className="px-2 md:px-6 lg:px-32 xl:px-44 2xl:px-64 mt-6 space-y-2">
@@ -62,10 +69,10 @@ const NowPlaying = function ({ activeStyle, langCode }) {
           </button>
         </div>
       </div>
-      <motion.div
-        initial
-        animate={{ y: 50 }}
-        whileInView={{ y: 0 }}
+      <div
+        data-aos="zoom-in-up"
+        data-aos-delay="500"
+        data-aos-duration="300"
         className="flex gap-3 overflow-auto scroll-smooth min-h-80"
       >
         {data.map((item) => (
@@ -76,7 +83,7 @@ const NowPlaying = function ({ activeStyle, langCode }) {
             type={nowPlaying}
           />
         ))}
-      </motion.div>
+      </div>
       <hr className="mb-8 mt-14" />
     </div>
   );

@@ -1,7 +1,9 @@
 import { useMemo, useState, useEffect } from "react";
 import Card from "../components/Card";
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useLocation } from "react-router-dom";
 
 const TopRated = function ({ activeStyle, langCode }) {
   const [topRated, setTopRated] = useState("movie");
@@ -22,6 +24,11 @@ const TopRated = function ({ activeStyle, langCode }) {
   function handleTopRated(buttonName) {
     setTopRated(buttonName);
   }
+
+  const location = useLocation();
+  useEffect(() => {
+    AOS.init();
+  }, [location.pathname]);
 
   useEffect(() => {
     setIsLoaded(false);
@@ -60,16 +67,17 @@ const TopRated = function ({ activeStyle, langCode }) {
           </button>
         </div>
       </div>
-      <motion.div
-        initial
-        animate={{ y: 50 }}
-        whileInView={{ y: 0 }}
+
+      <div
+        data-aos="zoom-in-up"
+        data-aos-delay="500"
+        data-aos-duration="300"
         className="flex gap-3 overflow-auto scroll-smooth min-h-80"
       >
         {data.map((item) => (
           <Card key={item.id} movie={item} loaded={isloaded} type={topRated} />
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 };

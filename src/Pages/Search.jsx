@@ -1,18 +1,10 @@
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretRight, faCaretLeft } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-const Search = function ({ langCode }) {
-  // const location = useLocation();
-  // const { pathname } = location;
-  // const searchQuery = pathname.slice(8);
-
-  const [selected, setSelected] = useState("movies");
+const Search = function ({ langCode, userName, userUID }) {
   const [results, setResults] = useState({});
   const { t } = useTranslation();
-  // const [query, setQuery] = useState(window.location.hostname);
   const { query } = useParams();
   const navigate = useNavigate();
 
@@ -28,13 +20,6 @@ const Search = function ({ langCode }) {
       },
     };
   }, []);
-  const activeStyle = useMemo(() => {
-    return `text-lime-500 bg-primary rounded-full py-1 transition duration-600 ease-in-out`;
-  }, []);
-
-  function hadleSelected(buttonName) {
-    setSelected(buttonName);
-  }
 
   function dateFormatter(date) {
     const months = [
@@ -79,7 +64,6 @@ const Search = function ({ langCode }) {
       setResults((prev) => {
         return { ...prev, shows: filtered };
       });
-      console.log(data.results);
     };
 
     fetchSearchResult();
@@ -106,7 +90,7 @@ const Search = function ({ langCode }) {
 
   return (
     <>
-      <NavBar />
+      <NavBar userName={userName} userUID={userUID} />
 
       <div
         className={`px-2 md:px-4 lg:px-30 xl:px-40 2xl:px-60  flex ${
@@ -128,86 +112,8 @@ const Search = function ({ langCode }) {
               {t("search")}
             </button>
           </div>
-          <hr className="mb-2 text-primary" />
-          <div className="border flex gap-1 rounded-full border-primary ">
-            <button
-              onClick={() => hadleSelected("movies")}
-              className={`px-4 text-xl w-1/2  ${
-                selected === "movies" ? activeStyle : `text-primary`
-              } `}
-            >
-              {t("movies")}
-            </button>
-            <button
-              onClick={() => hadleSelected("shows")}
-              className={`px-4 text-xl w-1/2  ${
-                selected === "shows" ? activeStyle : `text-primary`
-              } `}
-            >
-              {t("tvShows")}
-            </button>
-          </div>
-          <div
-            className={`bg-primary text-stone-300 rounded-full pl-6 py-2 text-2xl cursor-pointer hover:text-stone-100 hover:translate-x-1 flex items-center justify-between pr-6 duration-300 ${
-              langCode === "ar" ? "flex-row-reverse" : ""
-            } `}
-          >
-            <span>
-              {selected === "shows"
-                ? `${t("airingToday")}`
-                : `${t("nowPlaying")}`}{" "}
-            </span>
-            {langCode === "ar" ? (
-              <FontAwesomeIcon icon={faCaretLeft} />
-            ) : (
-              <FontAwesomeIcon icon={faCaretRight} />
-            )}
-          </div>
-          {selected === "movies" && (
-            <div
-              className={`bg-primary text-stone-300 rounded-full pl-6 py-2 text-2xl cursor-pointer hover:text-stone-100 hover:translate-x-1 flex items-center justify-between pr-6 duration-300 ${
-                langCode === "ar" ? "flex-row-reverse" : ""
-              } `}
-            >
-              <span>
-                {selected === "shows"
-                  ? `${t("airingToday")}`
-                  : `${t("upComing")}`}{" "}
-              </span>
-
-              {langCode === "ar" ? (
-                <FontAwesomeIcon icon={faCaretLeft} />
-              ) : (
-                <FontAwesomeIcon icon={faCaretRight} />
-              )}
-            </div>
-          )}
-          <div
-            className={`bg-primary text-stone-300 rounded-full pl-6 py-2 text-2xl cursor-pointer hover:text-stone-100 hover:translate-x-1 flex items-center justify-between pr-6 duration-300 ${
-              langCode === "ar" ? "flex-row-reverse" : ""
-            } `}
-          >
-            <span>{t("popular")} </span>
-            {langCode === "ar" ? (
-              <FontAwesomeIcon icon={faCaretLeft} />
-            ) : (
-              <FontAwesomeIcon icon={faCaretRight} />
-            )}
-          </div>
-          <div
-            className={`bg-primary text-stone-300 rounded-full pl-6 py-2 text-2xl cursor-pointer hover:text-stone-100 hover:translate-x-1 flex items-center justify-between pr-6 duration-300 ${
-              langCode === "ar" ? "flex-row-reverse" : ""
-            } `}
-          >
-            <span>{t("topRated")} </span>
-            {langCode === "ar" ? (
-              <FontAwesomeIcon icon={faCaretLeft} />
-            ) : (
-              <FontAwesomeIcon icon={faCaretRight} />
-            )}
-          </div>
         </div>
-        <div className="min-w-[40rem] flex flex-col gap-3 my-6 mx-6 ">
+        <div className="min-w-[40rem] grid grid-cols-2 gap-3 my-6 mx-6 ">
           {results.movies?.map((result) => (
             <div
               key={result.id + result.vote_count}
@@ -216,7 +122,7 @@ const Search = function ({ langCode }) {
               <div>
                 <NavLink to={`/movies/${result.id}`}>
                   <img
-                    className="size-40 hover:opacity-95 "
+                    className="min-w-32 w-32 h-40 min-h-40 hover:opacity-95 "
                     src={posterUrlBase + result.poster_path}
                     alt="Media poster"
                   />
@@ -224,7 +130,7 @@ const Search = function ({ langCode }) {
               </div>
               <div className="flex flex-col mx-2 my-2 text-xl">
                 <NavLink to={`/movies/${result.id}`}>
-                  <span className="font-bold">
+                  <span className="font-bold hover:text-lime-500 duration-300">
                     {result.original_title || result.original_name}
                   </span>
                 </NavLink>
@@ -240,7 +146,7 @@ const Search = function ({ langCode }) {
               <div>
                 <NavLink to={`/shows/${result.id}`}>
                   <img
-                    className="size-40 hover:opacity-95 "
+                    className="min-w-32 w-32 h-40 min-h-40  hover:opacity-95 "
                     src={posterUrlBase + result.poster_path}
                     alt="Media poster"
                   />

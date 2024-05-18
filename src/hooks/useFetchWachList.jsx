@@ -8,7 +8,6 @@ function useFetchWachList({ userUID, trigger }) {
 
   useEffect(() => {
     async function handleFetchWachList() {
-      // Add a new document in collection "cities"
       const docRef = collection(db, userUID);
       const docSnap = await getDocs(docRef);
       const ids = docSnap.docs.map((snap) => snap.id);

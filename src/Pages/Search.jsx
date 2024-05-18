@@ -93,12 +93,12 @@ const Search = function ({ langCode, userName, userUID }) {
       <NavBar userName={userName} userUID={userUID} />
 
       <div
-        className={`px-2 md:px-4 lg:px-30 xl:px-40 2xl:px-60  flex ${
+        className={`px-2 md:px-4 lg:px-30 xl:px-40 2xl:px-60  flex flex-col md:flex-row ${
           langCode === "ar" ? "flex-row-reverse" : ""
         } `}
       >
         <div className={` h-fit shadow-lg flex flex-col gap-4 px-4 py-10 `}>
-          <div className="flex gap-6 mb-6 ">
+          <div className="flex flex-col items-center md:flex-row gap-6 mb-6 ">
             <input
               type="text"
               className="px-2 py-2 text-xl outline-none bg-stone-100 rounded-lg"
@@ -107,17 +107,17 @@ const Search = function ({ langCode, userName, userUID }) {
             />
             <button
               onClick={handleSearch}
-              className="rounded-xl bg-primary px-4 text-xl text-stone-300 hover:text-stone-100 duration-100 "
+              className="rounded-xl bg-primary px-4 text-xl text-stone-300 hover:text-stone-100 duration-100 min-h-10 w-fit "
             >
               {t("search")}
             </button>
           </div>
         </div>
-        <div className="min-w-[40rem] grid grid-cols-2 gap-3 my-6 mx-6 ">
-          {results.movies?.map((result) => (
+        <div className="md:min-w-[20rem] grid grid-cols-1 lg:grid-cols-2 gap-3 my-6 mx-6 ">
+          {results?.movies?.map((result) => (
             <div
               key={result.id + result.vote_count}
-              className="rounded-xl overflow-hidden shadow-md flex "
+              className="rounded-xl md:max-w-96 overflow-hidden shadow-md flex "
             >
               <div>
                 <NavLink to={`/movies/${result.id}`}>
@@ -138,10 +138,10 @@ const Search = function ({ langCode, userName, userUID }) {
               </div>
             </div>
           ))}
-          {results.shows?.map((result) => (
+          {results?.shows?.map((result) => (
             <div
               key={result.id + result.vote_count}
-              className="rounded-xl overflow-hidden shadow-md flex "
+              className="rounded-xl md:max-w-96 overflow-hidden shadow-md flex "
             >
               <div>
                 <NavLink to={`/shows/${result.id}`}>

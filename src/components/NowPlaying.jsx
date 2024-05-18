@@ -49,11 +49,11 @@ const NowPlaying = function ({ activeStyle, langCode }) {
   return (
     <div className="px-2 md:px-6 lg:px-32 xl:px-44 2xl:px-64 mt-6 space-y-2">
       <div className="flex gap-4 items-center">
-        <h2 className="text-4xl">{t("nowPlaying")}</h2>
+        <h2 className="text-xl md:text-4xl">{t("nowPlaying")}</h2>
         <div className="border flex gap-1 rounded-full border-primary ">
           <button
             onClick={() => handleNowPlaying("movie")}
-            className={`px-4 text-lg  ${
+            className={`px-4 text-sm md:text-lg ${
               nowPlaying === "movie" ? activeStyle : `text-primary`
             } `}
           >
@@ -61,7 +61,7 @@ const NowPlaying = function ({ activeStyle, langCode }) {
           </button>
           <button
             onClick={() => handleNowPlaying("show")}
-            className={`px-4 text-lg  ${
+            className={`px-4 text-sm md:text-lg   ${
               nowPlaying === "show" ? activeStyle : `text-primary`
             } `}
           >

@@ -22,7 +22,7 @@ const Hero = function ({ userName, langCode }) {
     <div className="px-2 md:px-4 lg:px-30 xl:px-40 2xl:px-60">
       <div style={coverStyle}></div>
       <div
-        className={`text-stone-100 text-lg lg:text-xl 2xl:text-2xl pl-2 md:pl-20 pt-20 space-y-2 absolute top-32`}
+        className={`text-stone-100 text-lg lg:text-xl 2xl:text-2xl p-4 md:pl-20 pt-20 space-y-2 absolute top-32`}
       >
         <p
           className={`font-extrabold 2xl:text-4xl sepia-0 ${
@@ -36,9 +36,9 @@ const Hero = function ({ userName, langCode }) {
         </p>
         <form
           id="search"
-          className="bg-stone-100 rounded-full flex items-center justify-between  "
+          className="bg-stone-100 rounded-full flex items-center md:justify-between w-fit text-xs md:text-xl   "
         >
-          <div className="ml-4  min-w-[30rem]">
+          <div className="ml-4 md:min-w-[30rem]">
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
               className="text-stone-600 mr-2"
@@ -47,7 +47,7 @@ const Hero = function ({ userName, langCode }) {
               required
               ref={search}
               onChange={() => setQuery(search.current.value)}
-              className="bg-stone-100 outline-none text-stone-900  min-w-[27rem]"
+              className="bg-stone-100 outline-none text-stone-900  md:min-w-[27rem]"
               type="text"
               placeholder={t("searchPlaceHolder")}
             />

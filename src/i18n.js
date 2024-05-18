@@ -24,7 +24,7 @@ i18n
           today: "Today",
           thisWeek: "This Week",
           movies: "Movies",
-          tvShows: "TV Shows",
+          tvShows: "Shows",
           nowPlaying: "Now Playing",
           topRated: "Top Rated",
           votes: "Votes",

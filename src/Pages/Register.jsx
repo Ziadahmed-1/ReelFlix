@@ -98,8 +98,10 @@ function Register() {
 
   return (
     <div style={coverStyle} className="flex items-center justify-center">
-      <div className="bg-[#2A2A2A] shadow-slate-950 shadow-2xl flex flex-col items-center rounded-3xl py-10 px-20 gap-10">
-        <img src={reelFlix} alt="reelFlix logo" className="w-48 h-14" />
+      <div className="bg-[#2A2A2A] shadow-slate-950 shadow-2xl flex flex-col items-center rounded-3xl py-10 px-6 md:px-20 gap-6 md:gap-10">
+        <NavLink to="/">
+          <img src={reelFlix} alt="reelFlix logo" className="w-48 h-14" />
+        </NavLink>
         <h1 className="text-3xl font-semibold text-white">Welcome </h1>
         <form className="flex flex-col gap-6 text-center">
           <p className="text-xl font-semibold text-white">Enter Your Details</p>

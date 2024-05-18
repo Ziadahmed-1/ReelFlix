@@ -47,11 +47,11 @@ const TopRated = function ({ activeStyle, langCode }) {
   return (
     <div className="px-2 md:px-6 lg:px-32 xl:px-44 2xl:px-64 mt-6 space-y-2">
       <div className="flex gap-4 items-center">
-        <h2 className="text-4xl">{t("topRated")}</h2>
+        <h2 className=" text-2xl md:text-4xl">{t("topRated")}</h2>
         <div className="border flex gap-1 rounded-full border-primary ">
           <button
             onClick={() => handleTopRated("movie")}
-            className={`px-4 text-lg  ${
+            className={`px-4 text-sm md:text-lg   ${
               topRated === "movie" ? activeStyle : `text-primary`
             } `}
           >
@@ -59,7 +59,7 @@ const TopRated = function ({ activeStyle, langCode }) {
           </button>
           <button
             onClick={() => handleTopRated("show")}
-            className={`px-4 text-lg  ${
+            className={`px-4 text-sm md:text-lg   ${
               topRated === "show" ? activeStyle : `text-primary`
             } `}
           >

@@ -166,7 +166,7 @@ const Movie = function ({ langCode, userName, userUID }) {
 
   function cashFormatter(cash) {
     const arr = String(cash).split("");
-    const length = arr.length;
+    const length = arr?.length;
     const result = [];
     for (let i = 0; i < length; i++) {
       let cur = i + 1;
@@ -267,7 +267,7 @@ const Movie = function ({ langCode, userName, userUID }) {
                   movieLocal?.poster_path || movie?.poster_path
                 }`}
                 alt="movie poster"
-                className="w-64 min-w-64 rounded-lg  hover:opacity-95 "
+                className="min-w-64 w-64 rounded-lg  hover:opacity-95 "
               />
               <div className="flex flex-col gap-6 ">
                 <div
@@ -277,7 +277,7 @@ const Movie = function ({ langCode, userName, userUID }) {
                 >
                   <div className="flex flex-col">
                     <h1
-                      className={`text-4xl flex gap-2 font-semibold ${
+                      className={`text-xl md:text-4xl flex gap-2 font-semibold ${
                         langCode === "ar"
                           ? "flex-row-reverse text-right"
                           : "text-left"
@@ -290,7 +290,7 @@ const Movie = function ({ langCode, userName, userUID }) {
                         ({movie?.release_date?.slice(0, 4)})
                       </span>
                     </h1>
-                    <div className="text-md">
+                    <div className="text-xs md:text-md">
                       <h3 className="flex gap-2">
                         <span>
                           {`${dateFormatter(movie?.release_date)} (${
@@ -311,7 +311,7 @@ const Movie = function ({ langCode, userName, userUID }) {
                     <img
                       src={addedToList}
                       alt="Already in the list"
-                      className="size-16 p-2 rounded-lg hover:bg-stone-100 duration-200 ease-in"
+                      className="md:w-16 md:min-w-16 w-12 min-w-12 p-2 rounded-lg hover:bg-stone-100 duration-200 ease-in"
                     />
                   ) : (
                     <div className="relative">
@@ -320,7 +320,7 @@ const Movie = function ({ langCode, userName, userUID }) {
                         onClick={handleAddToWatchList}
                         src={addToListImg}
                         alt="Add to watchList"
-                        className="size-16 p-2 rounded-lg hover:bg-stone-100 hover:cursor-pointer duration-200 ease-in"
+                        className=" md:w-16 md:min-w-16 w-12 min-w-12  p-2 rounded-lg hover:bg-stone-100 hover:cursor-pointer duration-200 ease-in"
                       />
                       {openLoginMsg && (
                         <div
@@ -399,11 +399,11 @@ const Movie = function ({ langCode, userName, userUID }) {
                     {tagLine}
                   </p>
                   <h3 className="font-semibold text-xl">{t("overview")}</h3>
-                  <p className="text-lg ">
+                  <p className="md:text-lg ">
                     {movieLocal.overview || movie.overview}
                   </p>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col md:flex-row gap-4 md:justify-between flex-wrap">
                   <div>
                     <h4 className="text-xl font-semibold">{t("director")}</h4>
                     <span className="text-lg">
@@ -443,7 +443,7 @@ const Movie = function ({ langCode, userName, userUID }) {
                       langCode === "ar" ? "flex-row-reverse" : "flex-row"
                     }`}
                   >
-                    {cast.map((actor) => (
+                    {cast?.map((actor) => (
                       <div
                         key={actor.cast_id}
                         className="min-w-44 rounded-lg overflow-hidden shadow-lg"
@@ -473,7 +473,7 @@ const Movie = function ({ langCode, userName, userUID }) {
             )}
             <div>
               <h3 className="text-2xl font-semibold mb-4">{t("stats")}</h3>
-              <div className="grid grid-cols-3 gap-6 ">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 ">
                 <div>
                   <h4 className="text-xl font-semibold">{t("language")}</h4>
                   <span className="text-lg">
@@ -517,7 +517,7 @@ const Movie = function ({ langCode, userName, userUID }) {
                   <h4 className="text-xl font-semibold">{t("genres")}</h4>
                   <span className="text-lg">
                     {genres
-                      ? genres.map((genre) => genre.name).join(" - ")
+                      ? genres?.map((genre) => genre.name).join(" - ")
                       : "(Genres can't be found!)"}
                   </span>
                 </div>
@@ -566,13 +566,13 @@ const Movie = function ({ langCode, userName, userUID }) {
                 {t("moreLikeThis")}
               </h3>
               <div data-aos="zoom-in-up" data-aos-delay="300">
-                {similars.length > 0 ? (
+                {similars?.length > 0 ? (
                   <div
                     className={`flex gap-3 overflow-auto scroll-smooth min-h-80 ${
                       langCode === "ar" ? "flex-row-reverse" : "flex-row"
                     }`}
                   >
-                    {similars.map((movie) => (
+                    {similars?.map((movie) => (
                       <Cart key={movie.id} movie={movie} loaded type="movie" />
                     ))}
                   </div>

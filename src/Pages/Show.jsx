@@ -261,7 +261,7 @@ const Show = function ({ langCode, userName, userUID }) {
                 >
                   <div className="flex flex-col">
                     <h1
-                      className={`text-4xl flex gap-2 font-semibold ${
+                      className={`text-2xl md:text-4xl flex gap-2 font-semibold ${
                         langCode === "ar" ? "flex-row-reverse" : ""
                       }`}
                     >
@@ -272,7 +272,7 @@ const Show = function ({ langCode, userName, userUID }) {
                         ({show?.first_air_date?.slice(0, 4)})
                       </span>
                     </h1>
-                    <div className="text-md">
+                    <div className="text-sm md:text-md">
                       <h3 className="flex gap-2 ">
                         <span>
                           {`${dateFormatter(show?.first_air_date)} (${
@@ -291,7 +291,7 @@ const Show = function ({ langCode, userName, userUID }) {
                     <img
                       src={addedToList}
                       alt="Already in the list"
-                      className="size-16 p-2 rounded-lg hover:bg-stone-100 duration-200 ease-in"
+                      className="md:w-16 md:min-w-16 w-12 min-w-12 p-2 rounded-lg hover:bg-stone-100 duration-200 ease-in"
                     />
                   ) : (
                     <div className="relative">
@@ -299,7 +299,7 @@ const Show = function ({ langCode, userName, userUID }) {
                         onClick={handleAddToWatchList}
                         src={addToListImg}
                         alt="Add to watchList"
-                        className="size-16 p-2 rounded-lg hover:bg-stone-100 hover:cursor-pointer duration-200 ease-in"
+                        className="md:w-16 md:min-w-16 w-12 min-w-12 p-2 rounded-lg hover:bg-stone-100 hover:cursor-pointer duration-200 ease-in"
                       />
 
                       {openLoginMsg && (
@@ -379,11 +379,11 @@ const Show = function ({ langCode, userName, userUID }) {
                     {tagLine}
                   </p>
                   <h3 className="font-semibold text-xl">{t("overview")}</h3>
-                  <p className="text-lg">
+                  <p className="md:text-lg">
                     {showLocal.overview || show.overview}
                   </p>
                 </div>
-                <div className="flex justify-between flex-wrap">
+                <div className="flex flex-col md:flex-row gap-4 md:justify-between flex-wrap">
                   <div>
                     <h4 className="text-xl font-semibold">{t("director")}</h4>
                     <span className="text-lg">
@@ -408,8 +408,8 @@ const Show = function ({ langCode, userName, userUID }) {
                       {t("productionCompanies")}
                     </h4>
                     <ul className="text-lg  gap-2 max-w-64">
-                      {show.production_companies
-                        ? show.production_companies.map((company) => (
+                      {show?.production_companies?.length !== 0
+                        ? show?.production_companies?.map((company) => (
                             <li key={company.id}>{company.name}</li>
                           ))
                         : "(Failed to load for now !)"}
@@ -419,7 +419,7 @@ const Show = function ({ langCode, userName, userUID }) {
               </div>
             </div>
             <hr className="my-4" />
-            {cast.length !== 0 && (
+            {cast?.length !== 0 && (
               <>
                 <div>
                   <h3 className="text-2xl font-semibold mb-2">
@@ -459,7 +459,7 @@ const Show = function ({ langCode, userName, userUID }) {
             )}
             <div>
               <h3 className="text-2xl font-semibold mb-4">{t("stats")}</h3>
-              <div className="grid grid-cols-3 gap-6 ">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 ">
                 <div>
                   <h4 className="text-xl font-semibold">{t("language")}</h4>
                   <span className="text-lg">
@@ -546,7 +546,7 @@ const Show = function ({ langCode, userName, userUID }) {
                 {t("moreLikeThis")}
               </h3>
               <div data-aos="zoom-in-up" data-aos-delay="300">
-                {similars.length > 0 ? (
+                {similars?.length > 0 ? (
                   <div
                     className={`flex gap-3 overflow-auto scroll-smooth min-h-80 ${
                       langCode === "ar" ? "flex-row-reverse" : "flex-row"

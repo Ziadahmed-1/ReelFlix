@@ -64,11 +64,11 @@ const Trending = function ({ activeStyle, langCode }) {
   return (
     <div className="px-2 md:px-6 lg:px-32 xl:px-44 2xl:px-64 mt-6">
       <div className="flex gap-4 items-center">
-        <h2 className="text-4xl">{t("trending")}</h2>
+        <h2 className=" text-2xl md:text-4xl">{t("trending")}</h2>
         <div className="border flex gap-1 rounded-full border-primary ">
           <button
             onClick={() => hadleTrending("Today")}
-            className={`px-4 text-lg  ${
+            className={`px-4 text-sm md:text-lg  ${
               trending === "Today" ? activeStyle : `text-primary`
             } `}
           >
@@ -76,7 +76,7 @@ const Trending = function ({ activeStyle, langCode }) {
           </button>
           <button
             onClick={() => hadleTrending("This Week")}
-            className={`px-4 text-lg  ${
+            className={`px-4 text-sm md:text-lg  ${
               trending === "This Week" ? activeStyle : `text-primary`
             } `}
           >
@@ -85,7 +85,7 @@ const Trending = function ({ activeStyle, langCode }) {
         </div>
       </div>
       <div className="felx flex-col gap-2 ">
-        <h3 className="text-3xl mt-6">{t("movies")}</h3>
+        <h3 className="text-2xl md:text-3xl mt-6">{t("movies")}</h3>
         <div
           data-aos="zoom-in-up"
           data-aos-delay="500"
@@ -98,7 +98,7 @@ const Trending = function ({ activeStyle, langCode }) {
         </div>
       </div>
       <div className="felx flex-col gap-2 ">
-        <h3 className="text-3xl mt-6">{t("tvShows")}</h3>
+        <h3 className="text-2xl md:text-3xl mt-6">{t("tvShows")}</h3>
         <div
           data-aos="zoom-in-up"
           data-aos-delay="500"
